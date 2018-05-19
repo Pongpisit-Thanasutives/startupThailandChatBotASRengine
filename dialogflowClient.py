@@ -1,4 +1,5 @@
 import dialogflow
+import json
 def detect_intent_audio(project_id, session_id, audio_file_path, language_code):
     """Returns the result of detect intent with an audio file as input.
 
@@ -25,11 +26,36 @@ def detect_intent_audio(project_id, session_id, audio_file_path, language_code):
         session=session, query_input=query_input,
         input_audio=input_audio)
 
-    print(response.query_result)  
-    # print('=' * 20)
-    # print('Query text: {}'.format(response.query_result.query_text))
-    # print('Detected intent: {} (confidence: {})\n'.format(
-    #     response.query_result.intent.display_name,
-    #     response.query_result.intent_detection_confidence))
-    # print('Fulfillment text: {}\n'.format(
-    #     response.query_result.fulfillment_text))
+    result = {}
+    artist = ''
+    song = ''
+    text = response.query_result.query_text
+    if "song" in response.query_result.parameters:
+        try:
+            song = '{}'.format(response.query_result.parameters["song"][0])
+        except IndexError:
+            pass
+    if "artist" in response.query_result.parameters:
+        try:
+            artist = '{}'.format(response.query_result.parameters["artist"][0])
+        except IndexError:
+            pass
+    if artist == '' and 'เดอะทอย' in text:
+        artist = 'เดอะทอย'
+    intent = '{}'.format(response.query_result.intent.display_name)
+    responseText = '{}'.format(response.query_result.fulfillment_text)
+
+    print(text)
+    print(song)
+    print(artist)
+    print(intent)
+    print(responseText)
+
+    result['text'] = text
+    result['song'] = song
+    result['artist'] = artist
+    result['intent'] = intent
+    result['responseText'] = responseText
+    print(result)
+
+    return result

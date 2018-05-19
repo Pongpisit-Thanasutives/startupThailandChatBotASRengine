@@ -5,9 +5,8 @@ from subprocess import Popen, PIPE
 
 def bandpass_filter():
     subprocess.call("./clean.sh")
-    # replace pwd with your computer password
-    pwd = ""
-    proc = Popen(["sudo", "-S", "ffmpeg", "-i", "microphone-results-clean.wav", "-af", "highpass=300, lowpass=3400", "microphone-results-clean.wav"], stdout=PIPE, stdin=PIPE, stderr=PIPE, universal_newlines=True)
+    pwd = "hackmeifyoucan"
+    proc = Popen(["sudo", "-S", "ffmpeg", "-i", "microphone-results-clean.wav", "-af", "highpass=300, lowpass=8000", "microphone-results-clean.wav"], stdout=PIPE, stdin=PIPE, stderr=PIPE, universal_newlines=True)
     proc.stdin.write("{}\n".format(pwd))
     out,err = proc.communicate(input="{}\n".format("y"))
 
